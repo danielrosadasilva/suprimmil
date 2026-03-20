@@ -1,0 +1,36 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
+
+@if (IsAuthenticated)
+{
+    Console.WriteLine("Usuário autenticado, redirecionando para dashboard...");
+    Navigation.NavigateTo("/dashboard");
+    @code {
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            Console.WriteLine($"OnAfterRenderAsync chamado. firstRender: {firstRender}, IsAuthenticated: {IsAuthenticated}");
+            if (firstRender && IsAuthenticated)
+            {
+                Navigation.NavigateTo("/dashboard");
+            }
+        }
+    }
+}
+else
+{
+    <div>Bem vindo a landpage</div>
+    
+}
+
+@code {
+    private bool IsAuthenticated { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+    }
+}

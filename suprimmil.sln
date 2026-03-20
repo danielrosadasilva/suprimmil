@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "suprimmil", "suprimmil.csproj", "{702EAEEC-C74B-C380-518B-08C4572BD684}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{702EAEEC-C74B-C380-518B-08C4572BD684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{702EAEEC-C74B-C380-518B-08C4572BD684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{702EAEEC-C74B-C380-518B-08C4572BD684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{702EAEEC-C74B-C380-518B-08C4572BD684}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2187D633-DEE2-48E3-9593-13A1ECD9108D}
+	EndGlobalSection
+EndGlobal

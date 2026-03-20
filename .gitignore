@@ -1,0 +1,38 @@
+# =========================
+# .NET / Blazor
+# =========================
+bin/
+obj/
+
+.vs/
+*.user
+*.suo
+
+# Build / publicação
+publish/
+*.publishproj
+
+# Logs
+*.log
+
+# =========================
+# Node / Tailwind
+# =========================
+node_modules/
+dist/
+build/
+
+# Tailwind cache
+.cache/
+
+# =========================
+# Config sensível
+# =========================
+.env
+appsettings.Development.json
+
+# =========================
+# Sistema
+# =========================
+.DS_Store
+Thumbs.db

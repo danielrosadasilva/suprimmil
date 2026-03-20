@@ -1,0 +1,83 @@
+@page "/login"
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
+
+        <form method="post" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input name="Email" type="email" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Senha</label>
+                <input name="Password" type="password" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewData["Error"] as string))
+            {
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    @ViewData["Error"]
+                </div>
+            }
+
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Entrar
+            </button>
+        </form>
+    </div>
+</div>
+
+@functions {
+    @using Microsoft.AspNetCore.Mvc.RazorPages
+    @using suprimmil.Dto.Access
+    @using suprimmil.Services
+
+    [IgnoreAntiforgeryToken]
+    public class LoginModel : PageModel
+    {
+        private readonly IAuthService _authService;
+
+        public LoginModel(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        [BindProperty]
+        public string Email { get; set; } = "";
+
+        [BindProperty]
+        public string Password { get; set; } = "";
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                var loginDto = new LoginDto { Email = Email, Password = Password };
+                var success = await _authService.LoginAsync(loginDto);
+                if (success)
+                {
+                    return Redirect("/dashboard");
+                }
+                else
+                {
+                    ViewData["Error"] = "Email ou senha incorretos";
+                    return Page();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewData["Error"] = ex.Message;
+                return Page();
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+﻿@page "/counter"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@layout MainLayout
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="bg-yellow-300" @onclick="IncrementCount">Click aqui!!</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

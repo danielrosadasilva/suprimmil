@@ -1,0 +1,84 @@
+@namespace Suprimmil.Components.Content
+
+<section class="bg-gray-100 py-16">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+        
+        <!-- Título -->
+        <h2 class="text-3xl md:text-4xl font-extrabold text-blue-900">
+            Resultados que comprovam nossa excelência
+        </h2>
+
+        <!-- Descrição -->
+        <p class="mt-4 text-gray-600">
+            A Suprimmil, localizada em Barcarena (PA), atua desde 2010 na região Norte, oferecendo soluções em fabricação e recuperação mecânica industrial, usinagem de alta complexidade, caldeiraria, tubulação (spools), fabricação de equipamentos, construção e montagem eletromecânica, além de manutenção industrial de alta performance.
+            Nosso principal objetivo é atender com excelência as demandas de clientes dos setores industrial, de mineração, cosmético e alimentício, sempre alinhados ao nosso planejamento estratégico, missão, visão e valores.
+        </p>
+
+        <!-- Cards -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+            
+            <!-- Item -->
+            @foreach (var item in Stats)
+            {
+                <div class="flex flex-col items-center">
+                    
+                    <!-- Ícone -->
+                    <div class="bg-orange-500 rounded-full h-20 w-20 flex items-center justify-center text-white">
+                        @item.Icon
+                    </div>
+
+                    <!-- Número -->
+                    <div class="mt-4 text-2xl font-bold text-gray-800">
+                        @item.Value
+                    </div>
+
+                    <!-- Label -->
+                    <div class="text-gray-500 text-sm mt-1">
+                        @item.Label
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+@code {
+    public class StatItem
+    {
+        public string Value { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+        public RenderFragment Icon { get; set; } = default!;
+    }
+
+    private List<StatItem> Stats = new()
+    {
+        new StatItem
+        {
+            Value = "+ 10",
+            Label = "Anos de Atividade",
+            Icon = @<svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 21h18v-2H3v2zm2-4h3V7H5v10zm5 0h3V3h-3v14zm5 0h3v-6h-3v6z"/>
+                    </svg>
+        },
+        new StatItem
+        {
+            Value = "+ 100",
+            Label = "Funcionários Ativos",
+            Icon = @<svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 
+                                 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 
+                                 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                    </svg>
+        },
+        new StatItem
+        {
+            Value = "+ 2.500",
+            Label = "Obras Realizadas",
+            Icon = @<svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 16V8l-8-5-8 5v8l8 5 8-5zm-8 
+                                 3.3L7 16v-6l6-3.8 6 3.8v6l-6 3.3z"/>
+                    </svg>
+        }
+    };
+}

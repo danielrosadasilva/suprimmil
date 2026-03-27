@@ -1,0 +1,105 @@
+@namespace Suprimmil.Components.Content
+@rendermode InteractiveServer
+@implements IDisposable
+@using Suprimmil.Models
+
+<section class="bg-orange-500 py-16">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+
+        <!-- Título -->
+        <h2 class="text-3xl font-bold text-white mb-10">
+            Nossos clientes
+        </h2>
+
+        <!-- Carrossel -->
+        <div class="relative overflow-hidden" @onmouseover="() => IsPaused = true" @onmouseout="() => IsPaused = false">
+
+            <div class="flex transition-transform duration-1000 ease-in-out" style="transform: translateX(-@(CurrentIndex * 100)%);">
+
+                @foreach (var chunk in ChunkedClients)
+                {
+                    <div class="min-w-full flex justify-center gap-6">
+                        @foreach (var client in chunk)
+                        {
+                            <div class="rounded-xl shadow-md bg-slate-50 w-36 h-24 flex items-center justify-center">
+                                <img src="@client.Logo" alt="@client.Name" class="max-h-12 object-contain" />
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <!-- Dots -->
+        <div class="flex justify-center mt-8 gap-2">
+            @for (int i = 0; i < ChunkedClients.Count; i++)
+            {
+                <button class="h-2 rounded-full transition-all 
+                    @(i == CurrentIndex ? "w-6 bg-white" : "w-2 bg-white/50")" @onclick="() => GoTo(i)">
+                </button>
+            }
+        </div>
+
+    </div>
+</section>
+
+@code {
+
+    private List<Client> Clients = new()
+    {
+        new() { Name = "Agropalma", Logo = "images/clients/agropalma.png" },
+        new() { Name = "Albras", Logo = "images/clients/albras.png" },
+        new() { Name = "Brasilit", Logo = "images/clients/brasilit.png" },
+        new() { Name = "Hidro", Logo = "images/clients/hidro.png" },
+        new() { Name = "Hidrovias", Logo = "images/clients/hidroviasbrasil.png" },
+        new() { Name = "Natura", Logo = "images/clients/natura.png" },
+        new() { Name = "Sinobras", Logo = "images/clients/sinobras.png" },
+        new() { Name = "Suzano", Logo = "images/clients/suzano.png" },
+        new Client() { Name = "Symrise", Logo = "images/clients/symrise.png" },
+    };
+
+    private int CurrentIndex = 0;
+
+    private int ItemsPerSlide = 5;
+
+    private bool IsPaused = false;
+
+    private System.Timers.Timer? _timer;
+
+    private List<List<Client>> ChunkedClients => Clients
+        .Select((item, index) => new { item, index })
+        .GroupBy(x => x.index / ItemsPerSlide)
+        .Select(g => g.Select(x => x.item).ToList())
+        .ToList();
+
+    private void GoTo(int index)
+    {
+        CurrentIndex = index;
+    }
+
+    protected override void OnInitialized()
+    {
+        // 🔒 Evita erro se só tiver 1 slide
+        if (ChunkedClients.Count <= 1)
+            return;
+
+        _timer = new System.Timers.Timer(3000);
+
+        _timer.Elapsed += async (_, _) =>
+        {
+            if (IsPaused) return;
+
+            CurrentIndex = (CurrentIndex + 1) % ChunkedClients.Count;
+
+            await InvokeAsync(StateHasChanged);
+        };
+
+        _timer.Start();
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}

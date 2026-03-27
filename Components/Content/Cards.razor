@@ -1,0 +1,74 @@
+@namespace Suprimmil.Components.Content
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
+    @foreach (var item in items)
+    {
+        <div
+            class="flex flex-col justify-between max-w-sm w-full rounded-lg shadow-lg bg-secondary text-white overflow-hidden">
+            <div class="relative w-full h-48 flex flex-col items-center justify-center">
+                <img class="h-20 w-20" src="@item.ImageUrl" alt="@item.Title">
+                <h2 class="text-3xl md:text-4xl font-extrabold">
+                    @item.Title
+                </h2>
+               
+            </div>
+            
+            <div class="p-2 pt-4">
+                <p class="text-center text-sm font-medium leading-relaxed">
+                    @item.Description
+                </p>
+            </div>
+            
+            <div class="px-6 py-2">
+                <div class="flex justify-end items-center w-full">
+                    <a class="text-sm font-semibold" href="@item.UrlButton" target="@item.Target">
+                        @item.TitleButton <span class="ml-2">›</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<CardItem> items = new()
+    {
+        new CardItem
+        {
+            Title = "Missão",
+            Description = "Atender todas as expectativas e condicionantes dos negócios oriundos em fornecimentos de bens e serviços, com responsabilidade, idoneidade e ética empresarial.",
+            ImageUrl = "/images/icones/missao.svg",
+            UrlButton = "#",
+            Target = "_self",
+            TitleButton = "Saiba mais"
+        },
+        new CardItem
+        {
+            Title = "Visão",
+            Description = "Ser a melhor empresa em atendimento a projetos e suprimentos de fornecimentos de materiais e equipamentos e serviços de montagem eletromecânica, manutenção industrial da região Norte.",
+            ImageUrl = "/images/icones/visao.svg",
+            UrlButton = "#",
+            Target = "_self",
+            TitleButton = "Saiba mais"
+        },
+        new CardItem
+        {
+            Title = "Valores",
+            Description = "Segurança zero acidentes, planejamento e sustentabilidade, qualidade e compromisso, ética e integridade, inovação e melhoria contínua dos processos, motivação com liderança e evolução.",
+            ImageUrl = "/images/icones/valores.svg",
+            UrlButton = "#",
+            Target = "_self",
+            TitleButton = "Saiba mais"
+        }
+    };
+
+    public class CardItem
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public string UrlButton { get; set; } = "";
+        public string Target { get; set; } = "_self";
+        public string TitleButton { get; set; } = "Saiba mais";
+    }
+}

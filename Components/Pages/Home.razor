@@ -2,8 +2,11 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
 
-<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
+@namespace Suprimmil.Components.Pages
 
+<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
+<Landing />
+@*
 @if (IsAuthenticated)
 {
     Console.WriteLine("Usuário autenticado, redirecionando para dashboard...");
@@ -21,7 +24,6 @@
 }
 else
 {
-    <div>Bem vindo a landpage</div>
     
 }
 
@@ -34,3 +36,4 @@ else
         IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
     }
 }
+*@

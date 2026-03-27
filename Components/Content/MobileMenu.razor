@@ -1,0 +1,50 @@
+@namespace suprimmil.Components.Content
+
+@* MobileMenu.razor *@
+
+@* Overlay opcional para fechar ao clicar fora (melhora a UX em mobile) *@
+@if (Open)
+{
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40" @onclick="HandleClose"></div>
+}
+
+<div class="fixed top-0 right-0 w-64 h-full bg-blue-950 text-white shadow-lg transform transition-transform duration-300 z-50
+    @(Open ? "translate-x-0" : "translate-x-full")">
+
+    <button class="absolute cursor-pointer top-4 right-4 text-2xl" @onclick="HandleClose" aria-label="Fechar menu">
+        ✕
+    </button>
+
+    <nav class="mt-20 flex flex-col gap-6 px-6 text-lg">
+        <a href="#" class="hover:border-b hover:border-orange-400" @onclick="HandleClose">Institucional</a>
+        <a href="#clientes" class="hover:border-b hover:border-orange-400" @onclick="HandleClose">Parceiros e
+            Clientes</a>
+            <a href="#noticias" class="hover:border-b hover:border-orange-400" @onclick="HandleClose">Noticias</a>
+            <a href="#" class="hover:border-b hover:border-orange-400" @onclick="HandleClose">Trabalhe conosco</a>
+            <a href="https://grupofortemetal.com.br:2096/" class="hover:border-b hover:border-orange-400"
+               @onclick="HandleClose">Webmail</a>
+            <a href="#contato" class="hover:border-b hover:border-orange-400" @onclick="HandleClose">Entre em Contato</a>
+            <a href="/login" class="bg-amber-600 rounded-xs text-black p-2" @onclick="HandleClose">Login</a>
+        </nav>
+    </div>
+
+@code {
+    /// <summary>
+    /// Controla se o menu está aberto ou fechado
+    /// </summary>
+    [Parameter]
+    public bool Open { get; set; }
+
+    /// <summary>
+    /// Callback para notificar o componente pai sobre mudanças no estado Open
+    /// Usado com @bind-Open no componente pai para two-way binding
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OpenChanged { get; set; }
+
+    private async Task HandleClose()
+    {
+        // Notifica o componente pai para atualizar o estado
+        await OpenChanged.InvokeAsync(false);
+    }
+}

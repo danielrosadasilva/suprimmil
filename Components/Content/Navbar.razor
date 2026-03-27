@@ -1,0 +1,51 @@
+@* Navbar.razor - Versão Simplificada *@
+@rendermode InteractiveServer
+@namespace suprimmil.Components.Content
+
+<header class="bg-zinc-100 text-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        @* Logo *@
+        <img src="@LogoUrl" alt="Logo" class="h-14" />
+        @* Menu Desktop *@
+        <nav class="hidden md:flex gap-6 items-center">
+            <a href="#quemsomos" class="font-bold hover:border-b hover:border-orange-400">Institucional</a>
+            <a href="#clientes" class="font-bold hover:border-b hover:border-orange-400">Clientes</a>
+            <a href="#noticias" class="font-bold hover:border-b hover:border-orange-400">Notícias</a>
+            <a href="/trabalhe-conosco" class="font-bold hover:border-b hover:border-orange-400">Trabalhe Conosco</a>
+            <a href="/login" class="font-bold bg-secondary text-white px-3 py-1 rounded">Login</a>
+        </nav>
+
+        @* Botão Mobile *@
+        <button class="md:hidden text-2xl text-primary" @onclick="() => MobileOpen = true">☰</button>
+
+    </div>
+
+    @* Menu Mobile (inline simplificado) *@
+    @if (MobileOpen)
+    {
+        <div class="fixed inset-0 z-50 flex">
+            @* Overlay *@
+            <div class="flex-1 bg-black/50" @onclick="() => MobileOpen = false"></div>
+
+            @* Painel *@
+            <div class="w-64 bg-blue-950 text-white p-4">
+                <button class="float-right text-xl" @onclick="() => MobileOpen = false">✕</button>
+                <nav class="mt-10 flex flex-col gap-4">
+                    <a href="#quemsomos" @onclick="() => MobileOpen = false">Institucional</a>
+                    <a href="#clientes" @onclick="() => MobileOpen = false">Clientes</a>
+                    <a href="#noticias" @onclick="() => MobileOpen = false">Notícias</a>
+                    <a href="/trabalhe-conosco" @onclick="() => MobileOpen = false">Trabalhe Conosco</a>
+                    <a href="https://grupofortemetal.com.br:2096/" @onclick="() => MobileOpen = false">Webmail</a>
+                    <a href="#contato" @onclick="() => MobileOpen = false">Contato</a>
+                    <a href="/login" @onclick="() => MobileOpen = false"
+                       class="bg-secondary text-black px-3 py-1 rounded">Login</a>
+                </nav>
+            </div>
+        </div>
+    }
+</header>
+
+@code {
+    private string LogoUrl = "images/logos/Logo-Grupo-Suprimmil.png"; // ajuste o caminho
+    private bool MobileOpen { get; set; }
+}

@@ -4,8 +4,9 @@
   "scripts": {
     "build-css": "tailwindcss -i ./wwwroot/app.css -o ./wwwroot/output.css",
     "watch-css": "tailwindcss -i ./wwwroot/app.css -o ./wwwroot/output.css --watch",
-    "watch-dotnet": "dotnet watch run",
-    "dev": "concurrently \"npm run watch-css\" \"npm run watch-dotnet\" --kill-others"
+    "watch-dotnet": "dotnet watch run --no-hot-reload",
+    "run-dotnet": "dotnet run",
+    "dev": "concurrently --names \"TAILWIND,BLZR\" --prefix-colors \"green,blue\" --kill-others \"npm run watch-css\" \"npm run watch-dotnet\""
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

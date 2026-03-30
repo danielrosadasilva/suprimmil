@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using suprimmil.Context.Maps;
 using suprimmil.Models;
 
 namespace suprimmil.Context;
@@ -17,7 +16,7 @@ public partial class AppDbContext : IdentityDbContext<User, IdentityRole<int>, i
         base.OnModelCreating(modelBuilder);
 
         // 3. Suas configurações customizadas
-        modelBuilder.ApplyConfiguration(new UserMap());
+        //modelBuilder.ApplyConfiguration(new UserMap());
 
         // Extensão do PostgreSQL
         modelBuilder.HasPostgresExtension("unaccent");

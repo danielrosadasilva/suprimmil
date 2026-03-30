@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using suprimmil.Context;
 using suprimmil.Models;
-using suprimmil.Repository;
 using suprimmil.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,8 +50,6 @@ builder.Services.AddAntiforgery(options =>
     options.HeaderName = "RequestVerificationToken";
 });
 
-builder.Services.AddScoped<IPasswordHasher<User>, CustomPasswordHasher>();
-
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCascadingAuthenticationState();
@@ -60,9 +57,6 @@ builder.Services.AddCascadingAuthenticationState();
 //services
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-//repositories
-builder.Services.AddScoped<UserRepository>();
 
 var app = builder.Build();
 

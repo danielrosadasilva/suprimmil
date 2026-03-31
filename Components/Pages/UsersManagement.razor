@@ -1,8 +1,9 @@
 @page "/users-management"
 
 @using suprimmil.Dto.Access
-@using suprimmil.Services
+@using suprimmil.Models
 @using Suprimmil.Components.Content
+@using suprimmil.Services
 
 @attribute [Authorize(Policy = "AdminOnly")]
 @inject IUserService _userService;
@@ -12,65 +13,83 @@
 
 @layout MainLayout
 
-<PageTitle>Gestão de usuarios</PageTitle>
+<PageTitle>Gestão de usuários</PageTitle>
 
-<h1>Gestão de Usuários</h1>
+<div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Gestão de Usuários</h1>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded" @onclick="() => showModal = true">Adicionar usuário</button>
+</div>
 
-<EditForm Model="loginDto" OnValidSubmit="CreateAdminUser">
-    <DataAnnotationsValidator />
+<UserModal IsOpen="@showModal" IsOpenChanged="@OnModalChanged" OnCreateUser="@OnCreateUser" />
 
-    <div class="mb-3">
-        <label for="email" class="block font-medium">Email</label>
-        <InputText id="email" @bind-Value="loginDto.Email" class="border p-2 min-w-min" />
-    </div>
-
-    <div class="mb-3">
-        <label for="password" class="block font-medium">Password</label>
-        <InputText id="password" @bind-Value="loginDto.Password" type="password" class="border p-2 min-w-min" />
-    </div>
-
-    <ValidationSummary />
-    <div class="mb-3">
-        <label class="inline-flex items-center">
-            <InputCheckbox @bind-Value="isAdmin" class="mr-2" />
-           Administrador
-        </label>
-    </div>
-
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 mt-2">Criar usuário</button>
-</EditForm>
+<div class="overflow-x-auto bg-white rounded shadow">
+    <table class="w-full text-left">
+        <thead class="bg-slate-100">
+            <tr>
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Email</th>
+                <th class="px-4 py-2">Usuário</th>
+                <th class="px-4 py-2">Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (users?.Count > 0)
+            {
+                @foreach (var u in users)
+                {
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="px-4 py-2">@u.Id</td>
+                        <td class="px-4 py-2">@u.Email</td>
+                        <td class="px-4 py-2">@u.UserName</td>
+                        <td class="px-4 py-2">@(u.IsAdmin ? "Sim" : "Não")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">Nenhum usuário encontrado.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <Toast />
 
 @code {
+    private bool showModal = false;
+    private List<User> users = new();
 
-    LoginDto loginDto = new LoginDto();
-    private bool isAdmin = false;
-
-    private bool? createdUserSuccess = null;
-    private List<string> errorMessages = new();
-
-    private async Task CreateAdminUser()
+    protected override async Task OnInitializedAsync()
     {
-        errorMessages.Clear();
+        await LoadUsers();
+    }
 
-        var result = await _userService.CreateUserAsync(loginDto.Email, loginDto.Password, isAdmin);
+    private async Task LoadUsers()
+    {
+        users = await _userService.GetAllUsersAsync();
+    }
+
+    private async Task OnCreateUser(CreateUserDto model)
+    {
+        var result = await _userService.CreateUserAsync(model.Email, model.Password, model.IsAdmin);
 
         if (result.Succeeded)
         {
-            createdUserSuccess = true;
-            loginDto.Email = string.Empty;
-            loginDto.Password = string.Empty;
-            isAdmin = false;
             await _toastService.ShowToastAsync("Usuário criado com sucesso!", true);
+            await LoadUsers();
         }
         else
         {
-            createdUserSuccess = false;
-            errorMessages = result.Errors.Select(e => e.Description).ToList();
-            var errors = string.Join(" ", errorMessages);
+            var errors = string.Join(" ", result.Errors.Select(e => e.Description));
             await _toastService.ShowToastAsync("Falha ao criar usuário: " + errors, false);
         }
     }
 
+    private async Task OnModalChanged(bool isOpen)
+    {
+        showModal = isOpen;
+        await Task.CompletedTask;
+    }
 }

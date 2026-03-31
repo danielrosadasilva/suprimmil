@@ -1,0 +1,66 @@
+@using suprimmil.Dto.Access
+@using suprimmil.Services
+@namespace Suprimmil.Components.Content
+
+@if (IsOpen)
+{
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold">Adicionar usuário</h2>
+                <button class="text-gray-600 hover:text-gray-900" @onclick="Close">✕</button>
+            </div>
+
+            <EditForm Model="user" OnValidSubmit="OnSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="block font-medium mb-1">Email</label>
+                    <InputText class="w-full border rounded px-3 py-2" @bind-Value="user.Email" />
+                </div>
+                <div class="mb-3">
+                    <label class="block font-medium mb-1">Senha</label>
+                    <InputText class="w-full border rounded px-3 py-2" type="password" @bind-Value="user.Password" />
+                </div>
+                <div class="mb-4">
+                    <label class="inline-flex items-center">
+                        <InputCheckbox class="mr-2" @bind-Value="IsAdmin" />
+                        Administrador
+                    </label>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" class="px-4 py-2 bg-gray-200 rounded" @onclick="Close">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Criar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private CreateUserDto user = new();
+    private bool IsAdmin { get; set; }
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter] public EventCallback<CreateUserDto> OnCreateUser { get; set; }
+
+    private async Task OnSubmit()
+    {
+        if (!string.IsNullOrWhiteSpace(user.Email) && !string.IsNullOrWhiteSpace(user.Password))
+        {
+            await OnCreateUser.InvokeAsync(user);
+            user = new CreateUserDto();
+            await CloseModal();
+        }
+    }
+
+    private async Task CloseModal()
+    {
+        IsOpen = false;
+        await IsOpenChanged.InvokeAsync(false);
+    }
+
+    private async Task Close() => await CloseModal();
+}

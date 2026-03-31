@@ -7,7 +7,14 @@
             <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(suprimmil.Components.Layout.MainLayout)">
                 <NotAuthorized>
                     <LayoutView Layout="typeof(suprimmil.Components.Layout.UnauthenticatedLayout)">
-                        <RedirectToLogin />
+                        <AuthorizeView Context="authContext">
+                            <Authorized>
+                                <RedirectToAccessDenied />
+                            </Authorized>
+                            <NotAuthorized>
+                                <RedirectToLogin />
+                            </NotAuthorized>
+                        </AuthorizeView>
                     </LayoutView>
                 </NotAuthorized>
             </AuthorizeRouteView>

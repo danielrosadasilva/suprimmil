@@ -1,0 +1,76 @@
+@page "/users-management"
+
+@using suprimmil.Dto.Access
+@using suprimmil.Services
+@using Suprimmil.Components.Content
+
+@attribute [Authorize(Policy = "AdminOnly")]
+@inject IUserService _userService;
+@inject ToastService _toastService;
+
+@rendermode InteractiveServer
+
+@layout MainLayout
+
+<PageTitle>Gestão de usuarios</PageTitle>
+
+<h1>Gestão de Usuários</h1>
+
+<EditForm Model="loginDto" OnValidSubmit="CreateAdminUser">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="email" class="block font-medium">Email</label>
+        <InputText id="email" @bind-Value="loginDto.Email" class="border p-2 min-w-min" />
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="block font-medium">Password</label>
+        <InputText id="password" @bind-Value="loginDto.Password" type="password" class="border p-2 min-w-min" />
+    </div>
+
+    <ValidationSummary />
+    <div class="mb-3">
+        <label class="inline-flex items-center">
+            <InputCheckbox @bind-Value="isAdmin" class="mr-2" />
+           Administrador
+        </label>
+    </div>
+
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 mt-2">Criar usuário</button>
+</EditForm>
+
+<Toast />
+
+@code {
+
+    LoginDto loginDto = new LoginDto();
+    private bool isAdmin = false;
+
+    private bool? createdUserSuccess = null;
+    private List<string> errorMessages = new();
+
+    private async Task CreateAdminUser()
+    {
+        errorMessages.Clear();
+
+        var result = await _userService.CreateUserAsync(loginDto.Email, loginDto.Password, isAdmin);
+
+        if (result.Succeeded)
+        {
+            createdUserSuccess = true;
+            loginDto.Email = string.Empty;
+            loginDto.Password = string.Empty;
+            isAdmin = false;
+            await _toastService.ShowToastAsync("Usuário criado com sucesso!", true);
+        }
+        else
+        {
+            createdUserSuccess = false;
+            errorMessages = result.Errors.Select(e => e.Description).ToList();
+            var errors = string.Join(" ", errorMessages);
+            await _toastService.ShowToastAsync("Falha ao criar usuário: " + errors, false);
+        }
+    }
+
+}

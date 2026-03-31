@@ -1,0 +1,40 @@
+﻿@page "/"
+@using Suprimmil.Components.Content
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+@namespace Suprimmil.Components.Pages
+
+<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
+
+<div>
+    <section>
+        <Topbar />
+    </section>
+    <section>
+        <Navbar />
+    </section>
+    <section>
+        <div class="relative w-full">
+            <Banners />
+            <div class="absolute top-0 left-0 w-full bg-black/50 z-20">
+                <Addressbar />
+            </div>
+        </div>
+    </section>
+    <section class="relative -mt-10 z-30 px-4">
+        <Cards />
+    </section>
+    <section class="relative mt-10 bg-zinc-100">
+        <StatsSection />
+    </section>
+    <section>
+        <ClientsCarousel />
+    </section>
+    <section>
+        <Segments />
+    </section>
+    <section>
+        <Footer />
+    </section>
+</div>

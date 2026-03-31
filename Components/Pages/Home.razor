@@ -1,39 +1,8 @@
-﻿@page "/"
-@inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthStateProvider
+@page "/home"
+@layout MainLayout
+@attribute [Authorize]
 
-@namespace Suprimmil.Components.Pages
-
-<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
-<Landing />
-@*
-@if (IsAuthenticated)
-{
-    Console.WriteLine("Usuário autenticado, redirecionando para dashboard...");
-    Navigation.NavigateTo("/dashboard");
-    @code {
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            Console.WriteLine($"OnAfterRenderAsync chamado. firstRender: {firstRender}, IsAuthenticated: {IsAuthenticated}");
-            if (firstRender && IsAuthenticated)
-            {
-                Navigation.NavigateTo("/dashboard");
-            }
-        }
-    }
-}
-else
-{
-    
-}
-
-@code {
-    private bool IsAuthenticated { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        IsAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
-    }
-}
-*@
+<PageTitle>Home</PageTitle>
+<div>
+    Bem vindo à página inicial!
+</div>

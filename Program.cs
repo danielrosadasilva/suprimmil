@@ -50,13 +50,23 @@ builder.Services.AddAntiforgery(options =>
     options.HeaderName = "RequestVerificationToken";
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, AppUserClaimsPrincipalFactory>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim("IsAdmin", "true")
+    );
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCascadingAuthenticationState();
 
 //services
 
+builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

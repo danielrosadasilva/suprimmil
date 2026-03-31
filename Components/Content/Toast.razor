@@ -1,0 +1,27 @@
+@using suprimmil.Services
+@implements IDisposable
+@inject ToastService ToastService
+
+@namespace Suprimmil.Components.Content
+
+<div class="fixed bottom-4 right-4 z-50" style="min-width: 260px;">
+    @if (ToastService.ShowToast)
+    {
+        <div class="rounded shadow-lg px-4 py-3 text-white" style="background-color: @(ToastService.IsSuccess ? "#22c55e" : "#ef4444");">
+            @ToastService.Message
+        </div>
+    }
+</div>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        ToastService.OnToastChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ToastService.OnToastChanged -= StateHasChanged;
+    }
+}

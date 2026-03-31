@@ -12,30 +12,17 @@
         <div class="nav flex-column">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="home" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-                </NavLink>
-            </div>
-
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-                </NavLink>
-            </div>
-
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="weather">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                    <i class="fa-solid fa-house px-2" /> Home
                 </NavLink>
             </div>
             <AuthorizeView Policy="AdminOnly">
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="users-management">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gestão de Usuários
+                        <i class="fa-solid fa-user px-2" /> Gestão de Usuários
                     </NavLink>
                 </div>
             </AuthorizeView>
         </div>
-
     </nav>
 
     <div class="p-4 border-t">

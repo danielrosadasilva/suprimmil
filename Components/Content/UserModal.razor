@@ -1,6 +1,6 @@
 @using suprimmil.Dto.Access
 @using suprimmil.Services
-@namespace Suprimmil.Components.Content
+@namespace suprimmil.Components.Content
 
 @if (IsOpen)
 {
@@ -25,7 +25,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="inline-flex items-center">
-                        <InputCheckbox class="mr-2" @bind-Value="IsAdmin" />
+                        <InputCheckbox class="mr-2" @bind-Value="user.IsAdmin" />
                         Administrador
                     </label>
                 </div>
@@ -41,7 +41,6 @@
 
 @code {
     private CreateUserDto user = new();
-    private bool IsAdmin { get; set; }
     [Parameter] public bool IsOpen { get; set; }
     [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
     [Parameter] public EventCallback<CreateUserDto> OnCreateUser { get; set; }

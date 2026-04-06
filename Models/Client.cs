@@ -1,4 +1,4 @@
-namespace Suprimmil.Models;
+namespace suprimmil.Models;
 
 public class Client
 {

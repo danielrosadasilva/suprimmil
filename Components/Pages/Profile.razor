@@ -1,0 +1,116 @@
+@page "/profile"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@layout MainLayout
+@using suprimmil.Dto.Access
+@using suprimmil.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IUserService UserService
+@inject ToastService ToastService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<PageTitle>Meu Perfil</PageTitle>
+
+<div class="min-h-[calc(100vh-4rem)] bg-gray-50 py-8">
+    <div class="max-w-3xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Meu Perfil</h1>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-10">
+                <div class="flex items-center justify-center gap-5">
+                    <div>
+                        <div class="flex items-center justify-items-center w-full">
+                            <i class="fa-solid fa-3x fa-circle-user" />
+                        </div>
+                        @if (userIsAdmin)
+                        {
+                            <span class="inline-flex items-center gap-1 mt-1 px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/90 backdrop-blur-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                Administrador
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-500">Email</p>
+                        <p class="text-sm font-semibold text-gray-900 truncate">@userEmail</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                <p class="text-sm text-gray-500">Altere sua senha para manter sua conta segura</p>
+                <button type="button"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
+                        @onclick="() => showPasswordModal = true">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                    </svg>
+                    Alterar Senha
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ChangePasswordModal IsOpen="@showPasswordModal" IsOpenChanged="OnModalChanged" OnSave="OnSavePassword" />
+<Toast />
+
+@code {
+    private string userEmail = string.Empty;
+    private string userId = string.Empty;
+    private bool userIsAdmin;
+    private bool showPasswordModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userEmail = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "N/A";
+            userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+            userIsAdmin = user.FindFirst("IsAdmin")?.Value == "true";
+        }
+    }
+
+    private async Task OnSavePassword(ChangePasswordDto model)
+    {
+        if (string.IsNullOrEmpty(userId)) return;
+       
+        var result = await UserService.ChangePasswordAsync(userId, model.CurrentPassword, model.NewPassword);
+
+        if (result.Succeeded)
+        {
+            await ToastService.ShowToastAsync("Senha alterada com sucesso!", true);
+            showPasswordModal = false;
+        }
+        else
+        {
+            var errors = string.Join(" ", result.Errors.Select(e => e.Description));
+            await ToastService.ShowToastAsync($"Falha ao alterar senha: {errors}", false);
+        }
+    }
+
+    private async Task OnModalChanged(bool isOpen)
+    {
+        showPasswordModal = isOpen;
+        await Task.CompletedTask;
+    }
+}

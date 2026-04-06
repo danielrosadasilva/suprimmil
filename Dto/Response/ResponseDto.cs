@@ -1,4 +1,4 @@
-namespace Suprimmil.Dto.Response;
+namespace suprimmil.Dto.Response;
 public class ResponseDto<T>
 {
     public bool Success { get; set; }

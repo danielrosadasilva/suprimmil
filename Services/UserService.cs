@@ -25,4 +25,18 @@ public class UserService(UserManager<User> userManager) : IUserService
     {
         return await _userManager.Users.ToListAsync();
     }
+
+    public async Task<User?> GetCurrentUserAsync(string? userId)
+    {
+        if (string.IsNullOrEmpty(userId)) return null;
+        return await _userManager.FindByIdAsync(userId);
+    }
+
+    public async Task<IdentityResult> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado." });
+
+        return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+    }
 }

@@ -1,44 +1,61 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using suprimmil;
 using suprimmil.Context;
 using suprimmil.Models;
 using suprimmil.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenAnyIP(int.Parse(port));
+    });
+}
+
+static void ConfigureEnvironmentVariables(ConfigurationManager configuration)
+{
+    Settings.DefaultDbConnection = configuration.GetConnectionString("DefaultDbConnection") ?? "";
+}
+
+ConfigureEnvironmentVariables(builder.Configuration);
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultDbConnection")));
 
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 {
-    options.Password.RequireDigit = false;       
-    options.Password.RequireLowercase = false;   
-    options.Password.RequireUppercase = false;   
-    options.Password.RequireNonAlphanumeric = false; 
-    options.Password.RequiredLength = 6;      
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
 
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 })
-.AddEntityFrameworkStores<AppDbContext>() 
+.AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/login";          
+    options.LoginPath = "/login";
     options.AccessDeniedPath = "/access-denied";
     options.Cookie.Name = "suprimmil.auth";
-    options.Cookie.HttpOnly = true;        
+    options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromHours(8);
-    options.SlidingExpiration = true;     
+    options.SlidingExpiration = true;
 
     if (builder.Environment.IsDevelopment())
     {
-        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; 
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     }
     else
     {
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;     
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     }
 });
 

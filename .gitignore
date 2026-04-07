@@ -36,3 +36,6 @@ appsettings.Development.json
 # =========================
 .DS_Store
 Thumbs.db
+
+#open-claude
+.openclaude-profile.json

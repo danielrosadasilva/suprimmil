@@ -1,0 +1,11 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: surprimmil
+    environment:
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      ConnectionStrings__DefaultDbConnection: ${DEFAULT_DB_CONNECTION}
+    ports:
+      - "5001:8080"

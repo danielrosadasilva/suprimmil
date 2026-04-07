@@ -1,62 +1,73 @@
 @namespace suprimmil.Components.Content
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 max-w-6xl mx-auto">
     @foreach (var item in items)
     {
-        <div
-            class="flex flex-col justify-between max-w-sm w-full rounded-lg shadow-lg bg-secondary text-white overflow-hidden">
-            <div class="relative w-full h-48 flex flex-col items-center justify-center">
-                <img class="h-20 w-20" src="@item.ImageUrl" alt="@item.Title">
-                <h2 class="text-2xl md:text-4xl font-extrabold">
+        <div class="group flex flex-col rounded-xl shadow-lg bg-white overflow-hidden
+                    transition-all duration-300 ease-out
+                    hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/20
+                    cursor-default border-2 border-orange-200 hover:border-orange-500">
+
+            <!-- Top accent bar -->
+            <div class="h-1.5 w-full bg-orange-500"></div>
+
+            <div class="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-transparent">
+                <div class="w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center
+                            group-hover:scale-110 group-hover:shadow-lg group-hover:bg-orange-100 transition-all duration-300">
+                    <i class="@item.IconClass text-2xl text-orange-600 group-hover:text-orange-700 transition-colors duration-300"></i>
+                </div>
+                <h2 class="mt-4 text-xl md:text-2xl font-extrabold text-orange-600 group-hover:text-orange-700 transition-colors duration-300">
                     @item.Title
                 </h2>
-               
             </div>
-            
-            <div class="p-2 pt-4">
-                <p class="text-center text-sm font-medium leading-relaxed">
+
+            <div class="flex-1 px-5 pb-2">
+                <p class="text-center text-sm leading-relaxed text-gray-600">
                     @item.Description
                 </p>
             </div>
-            
-            <div class="px-6 py-2">
-                <div class="flex justify-end items-center w-full">
-                    <a class="text-sm font-semibold" href="@item.UrlButton" target="@item.Target">
-                        @item.TitleButton <span class="ml-2">›</span>
-                    </a>
-                </div>
+
+            <div class="px-5 py-3 border-t border-orange-100">
+                <a class="inline-flex items-center text-sm font-semibold text-orange-600
+                          group-hover:text-orange-700 transition-colors duration-300"
+                   href="@item.UrlButton" target="@item.Target">
+                    @item.TitleButton
+                    <i class="fa-solid fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300 text-xs"></i>
+                </a>
             </div>
         </div>
     }
 </div>
 
 @code {
+    [Inject] IJSRuntime JSRuntime { get; set; } = default!;
+
     private List<CardItem> items = new()
     {
         new CardItem
         {
-            Title = "Missão",
-            Description = "Atender todas as expectativas e condicionantes dos negócios oriundos em fornecimentos de bens e serviços, com responsabilidade, idoneidade e ética empresarial.",
-            ImageUrl = "/images/icones/missao.svg",
-            UrlButton = "#",
+            Title = "Missao",
+            Description = "Atender todas as expectativas e condicionantes dos negocios oriundos em fornecimentos de bens e servicos, com responsabilidade, idoneidade e etica empresarial.",
+            IconClass = "fa-solid fa-compass",
+            UrlButton = "#quemsomos",
             Target = "_self",
             TitleButton = "Saiba mais"
         },
         new CardItem
         {
-            Title = "Visão",
-            Description = "Ser a melhor empresa em atendimento a projetos e suprimentos de fornecimentos de materiais e equipamentos e serviços de montagem eletromecânica, manutenção industrial da região Norte.",
-            ImageUrl = "/images/icones/visao.svg",
-            UrlButton = "#",
+            Title = "Visao",
+            Description = "Ser a melhor empresa em atendimento a projetos e suprimentos de fornecimentos de materiais e equipamentos e servicos de montagem eletromecanica, manutencao industrial da regiao Norte.",
+            IconClass = "fa-solid fa-eye",
+            UrlButton = "#segmentos",
             Target = "_self",
             TitleButton = "Saiba mais"
         },
         new CardItem
         {
             Title = "Valores",
-            Description = "Segurança zero acidentes, planejamento e sustentabilidade, qualidade e compromisso, ética e integridade, inovação e melhoria contínua dos processos, motivação com liderança e evolução.",
-            ImageUrl = "/images/icones/valores.svg",
-            UrlButton = "#",
+            Description = "Seguranca zero acidentes, planejamento e sustentabilidade, qualidade e compromisso, etica e integridade, inovacao e melhoria continua dos processos, motivacao com lideranca e evolucao.",
+            IconClass = "fa-solid fa-gem",
+            UrlButton = "#contato",
             Target = "_self",
             TitleButton = "Saiba mais"
         }
@@ -66,7 +77,7 @@
     {
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
-        public string ImageUrl { get; set; } = "";
+        public string IconClass { get; set; } = "";
         public string UrlButton { get; set; } = "";
         public string Target { get; set; } = "_self";
         public string TitleButton { get; set; } = "Saiba mais";

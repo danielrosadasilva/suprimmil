@@ -1,41 +1,38 @@
-﻿@page "/"
-@using suprimmil.Components.Content
-@using suprimmil.Components.Content.Button
-@inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthStateProvider
-
+@page "/"
+@rendermode InteractiveServer
 @namespace suprimmil.Components.Pages
+@using suprimmil.Components.Content
 
-<PageTitle>Suprimmil - Sua Plataforma Completa</PageTitle>
+<PageTitle>Suprimmil - Engenharia e Montagem Industrial</PageTitle>
 
-<div>
-    <section>
-        <Topbar />
-    </section>
-    <section>
-        <Navbar />
-    </section>
-    <section>
-        <div class="relative w-full">
-            <Banners />
-            <div class="absolute top-0 left-0 w-full bg-black/50 z-20">
-                <Addressbar />
-            </div>
+<div class="scroll-smooth">
+    <Topbar />
+    <Navbar />
+
+    <section id="banner" class="relative">
+        <Banners />
+        <div class="absolute top-0 left-0 w-full bg-black/50 z-20">
+            <Addressbar />
         </div>
     </section>
-    <section class="relative -mt-10 z-30 px-4">
+
+    <section id="missao-visao-valores" class="relative -mt-10 z-30 px-4">
         <Cards />
     </section>
-    <section class="relative mt-10 bg-zinc-100">
+
+    <section id="quemsomos">
         <StatsSection />
     </section>
-    <section>
+
+    <section id="clientes">
         <ClientsCarousel />
     </section>
-    <section>
+
+    <section id="segmentos">
         <Segments />
     </section>
-    <section>
+
+    <section id="contato">
         <Footer />
     </section>
 </div>

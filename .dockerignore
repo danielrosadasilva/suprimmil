@@ -1,0 +1,11 @@
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/bin/
+**/obj/
+**/node_modules/
+**/*.suo
+**/*.user
+**/.openclaude-profile.json
+**/Thumbs.db

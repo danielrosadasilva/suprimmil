@@ -714,6 +714,10 @@ video {
   margin-bottom: 2rem;
 }
 
+.me-2 {
+  margin-inline-end: 0.5rem;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -1169,6 +1173,10 @@ video {
 
 .bg-blue-600 {
   background-color: var(--blue-600);
+}
+
+.bg-blue-900 {
+  background-color: var(--blue-900);
 }
 
 .bg-blue-950 {
@@ -1909,6 +1917,10 @@ h1:focus {
 @media (min-width: 768px) {
   .md\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .md\:block {
+    display: block;
   }
 
   .md\:flex {
